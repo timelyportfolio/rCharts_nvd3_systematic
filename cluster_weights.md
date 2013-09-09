@@ -51,13 +51,11 @@ The [Systematic Investor blog](http://systematicinvestor.wordpress.com) is an in
 Let's start by getting the data and performing the calculations in R.  This is a direct copy and paste from the Systematic Investor post.  Thanks again Systematic Investor.
 
 
-```{r echo = F, message = F, warning = F, error = F, cache = F}
-require(knitr)
-opts_chunk$set(results='asis', message = F, warning = F, error = T, cache = F, tidy = F, rcharts="draft")
-load("data.Rda", envir = data)
-```
 
-```{r eval = F}
+
+
+
+```r
 #thanks Systematic Investor http://systematicinvestor.wordpress.com
 #for this post http://systematicinvestor.wordpress.com/2013/03/05/cluster-risk-parity-back-test/
 
@@ -109,10 +107,12 @@ models = create.strategies(obj, data)$models
 #strategy.performance.snapshoot(models, T)
 ```
 
+
 ### Plot with [rCharts](http://rcharts.io/site) and [nvd3](http://nvd3.org)
 With this really useful set of data, let's explore the weights assigned each asset by the Cluster Equal Weight (C.EW) method.  I will start by using a direct dump of the weight data, but as you might notice, doing the chart with daily data slows things down a bit.
 
-```{r}
+
+```r
 #use rCharts to get some interactive plots
 require(rCharts)
 require(reshape2)
@@ -137,10 +137,14 @@ nWeights$setLib(lib="libraries/widgets/nvd3")
 nWeights
 ```
 
+<iframe src=assets/fig/unnamed-chunk-3.html seamless></iframe>
+
+
 ### Aggregate Data for Better Performance
 With `plyr` we can do summarize our data by year.  I will use `mean` in the next 3 charts.
 
-```{r}
+
+```r
 #I don't think daily is necessary, so let's try some aggregation
 require(plyr)
 #use plyr to get average weight by some group of dates; I chose %Y for year
@@ -157,9 +161,13 @@ nAvgBar$setLib(lib="libraries/widgets/nvd3")
 nAvgBar
 ```
 
+<iframe src=assets/fig/unnamed-chunk-4.html seamless></iframe>
+
+
 Here is the same data as a stacked area plot instead of bar plot.
 
-```{r}
+
+```r
 nAvgArea <- nPlot(
   mean ~ date, 
   group = "symbol",
@@ -174,10 +182,14 @@ nAvgArea$setLib(lib="libraries/widgets/nvd3")
 nAvgArea
 ```
 
+<iframe src=assets/fig/unnamed-chunk-5.html seamless></iframe>
+
+
 ### Facet Like a Very Crude `ggplot2`
 In this [test branch](https://github.com/timelyportfolio/rCharts/tree/test-speedimprove) of `rCharts`, I have started experimenting with facets for `dimplejs` and `nvd3`.  Here are some ugly pie charts facetted by `year`.  Of course, if we had facet wrap like `ggplot2` these would be much better.
 
-```{r}
+
+```r
 nAvg <- nPlot(
  mean ~ symbol,
  #group = "symbol",
@@ -195,10 +207,14 @@ nAvg$templates$script = system.file(
 nAvg
 ```
 
+<iframe src=assets/fig/unnamed-chunk-6.html seamless></iframe>
+
+
 ### More Comprehensive View
 In the charts above, we limited our analysis to just one asset allocation method.  Let's expand our analysis to all the asset allocation methods that were calculated and demonstrate another chart facetted by `year`.
 
-```{r}
+
+```r
 #explore with strategy
 #do median weight by year
 strategy.melt <- do.call(rbind, lapply(names(models),function(x){
@@ -233,9 +249,13 @@ nStrat$templates$script = system.file(
 nStrat
 ```
 
+<iframe src=assets/fig/unnamed-chunk-7.html seamless></iframe>
+
+
 Another way to facet would be by strategy.
 
-```{r}
+
+```r
 nStrat2 <- nPlot(
   median ~ date,
   group = "symbol",
@@ -251,6 +271,9 @@ nStrat2$templates$script = system.file(
 )
 nStrat2
 ```
+
+<iframe src=assets/fig/unnamed-chunk-8.html seamless></iframe>
+
 
 ### Thanks
 Thanks again:
