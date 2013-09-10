@@ -54,7 +54,8 @@ Let's start by getting the data and performing the calculations in R.  This is a
 ```{r echo = F, message = F, warning = F, error = F, cache = F}
 require(knitr)
 opts_chunk$set(results='asis', message = F, warning = F, error = T, cache = F, tidy = F, rcharts="draft")
-load("data.Rda", envir = data)
+data = new.env()
+load("data.Rdata", envir = data)
 ```
 
 ```{r eval = F}
